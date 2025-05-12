@@ -38,8 +38,29 @@
         <label for="">Apellidos:</label> 
         <input type="text" name="apellidos_empleado" id="" required>
         <br><br>
-        <label for="">Departamento:</label> 
-        <input type="text" name="departamento_empleado" id="" required>
+        <label for="">Departamento:</label>
+        <!--Mostrar listado de departamos registrados-->
+        <?php
+            if(isset($_SESSION['username']))
+            {
+                // consultar departamentos registrados y ponerlos en una lista tipo select
+                $query_dptos = "SELECT id_departamento, nombre_departamento FROM Departamento ORDER BY nombre_departamento ASC";
+
+                $consulta_dptos = mysqli_query($conexion, $query_dptos) or trigger_error("Error en la consulta MySQL: ".mysqli_error($conexion));
+
+                echo "<select name = 'departamento' required/>";
+                echo "<option value = '0'>Selecione un Departamento</option>";
+                while($row = mysqli_fetch_array($consulta_dptos))
+                {
+                    echo '<option value = "'.$row['id_departamento'].'">'.$row['nombre_departamento'].'</option>';
+                }
+                echo "</select>";
+            }
+            else
+            {
+                header('location: index.php');
+            }
+        ?>
         <br><br>
         <button type="submit">Registrar</button>
     </form>
